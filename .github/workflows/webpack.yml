@@ -31,5 +31,15 @@ jobs:
     #   uses: actions/upload-pages-artifact@main
     #   with: path: 
 
-    - name: Deploy
-      uses: actions/deploy-pages@main
+
+  deploy:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+      
+    runs-on: ubuntu-latest
+    steps:
+      -name: Deploy
+      uswa: actions-deploy-pages@v1
+
