@@ -55,11 +55,11 @@ jobs:
         shell: sh
         if: runner.os == 'Linux'
         run: |
-          tar --dereference --hard-dereference 
-            --directory "$INPUT_PATH"
-            -cvf "$RUNNER_TEMP/artifact.tar"
-            --exclude=.git 
-            --exclude=.github 
+          tar --dereference --hard-dereference \
+            --directory "$INPUT_PATH" \
+            -cvf "$RUNNER_TEMP/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \ 
             .
         env:
           INPUT_PATH: ${{ inputs.path }}
