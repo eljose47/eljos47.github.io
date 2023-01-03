@@ -1,11 +1,11 @@
-name: NodeJS with Webpack
+name: Publish Page
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "release" ]
 
   pull_request:
-    branches: [ "master" ]
+    branches: [ "release" ]
 
 
 jobs:
