@@ -76,7 +76,7 @@ jobs:
           -cvf "$RUNNER_TEMP/artifact.tar" \
           --exclude=.git \
           --exclude=.github \
-    .
+          .
         env:
           INPUT_PATH: ./dist
 
