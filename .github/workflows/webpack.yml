@@ -40,6 +40,6 @@ jobs:
       
     runs-on: ubuntu-latest
     steps:
-      -name: Deploy
-      uswa: actions-deploy-pages@v1
+      - name: Deploy
+        uses: actions-deploy-pages@v1
 
