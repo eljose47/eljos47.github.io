@@ -6,15 +6,15 @@ on:
   pull_request:
     branches: [ "master" ]
 
-    inputs:
-      path:
-        required: true
-        default: "dist/"
+inputs:
+  path:
+    required: true
+    default: "dist/"
 
-      retention-days:
-        description: "Duration after which artifact will expire in days."
-        required: false
-        default: "1"
+  retention-days:
+    description: "Duration after which artifact will expire in days."
+    required: false
+    default: "1"
 
 jobs:
   build:
