@@ -6,15 +6,6 @@ on:
   pull_request:
     branches: [ "master" ]
 
-inputs:
-  path:
-    required: true
-    default: "dist/"
-
-  retention-days:
-    description: "Duration after which artifact will expire in days."
-    required: false
-    default: "1"
 
 jobs:
   build:
@@ -42,10 +33,19 @@ jobs:
     #   with: path: 
 
   deploy:
-    needs: build
-    permissions:
-      pages: write
-      id-token: write
+    inputs:
+    path:
+      required: true
+      default: "dist/"
+
+    retention-days:
+      description: "Duration after which artifact will expire in days."
+      required: false
+      default: "1"
+      needs: build
+      permissions:
+        pages: write
+        id-token: write
       
     runs-on: ubuntu-latest
     steps:
