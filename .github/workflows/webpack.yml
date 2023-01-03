@@ -48,16 +48,16 @@ jobs:
     permissions:
       pages: write
       id-token: write
-      
+
     runs-on: ubuntu-latest
     steps:
       - name: Archive artifact
         shell: sh
         if: runner.os == 'Linux'
         run: |
-          chmod -c -R +rX "$INPUT_PATH" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
+          # chmod -c -R +rX "$INPUT_PATH" | while read line; do
+          #   echo "::warning title=Invalid file permissions automatically fixed::$line"
+          # done
           tar \
             --dereference --hard-dereference \
             --directory "$INPUT_PATH" \
