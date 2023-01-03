@@ -3,15 +3,6 @@ name: NodeJS with Webpack
 on:
   push:
     branches: [ "master" ]
-    inputs:
-      path:
-        required: true
-        default: "dist/"
-
-      retention-days:
-        description: "Duration after which artifact will expire in days."
-        required: false
-        default: "1"
 
   pull_request:
     branches: [ "master" ]
@@ -54,8 +45,14 @@ jobs:
       env:
         INPUT_PATH: ./dist
 
-  deploy:
- 
+    - name: Upload Artifact
+      uses: actions/upload-artifact@main
+      with: 
+        name: github-pages
+        path: ${{ runner.temp }}/artifact.tar
+        retention-days: 1
+
+  deploy: 
     needs: build
     permissions:
       pages: write
@@ -63,14 +60,6 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-   
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@main
-        with: 
-          name: github-pages
-          path: ${{ runner.temp }}/artifact.tar
-          retention-days: ${{ inputs.retention-days }}
       - name: Deploy
         uses: actions/deploy-pages@v1
 
