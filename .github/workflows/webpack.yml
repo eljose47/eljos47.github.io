@@ -10,7 +10,7 @@ on:
       path:
         required: true
         default: "dist/"
-        
+
       retention-days:
         description: "Duration after which artifact will expire in days."
         required: false
@@ -110,7 +110,8 @@ jobs:
         uses: actions/upload-artifact@main
         with: 
           name: github-pages
-          path:  
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: ${{ inputs.retention-days }}
       - name: Deploy
         uses: actions/deploy-pages@v1
 
