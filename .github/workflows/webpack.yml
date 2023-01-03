@@ -12,10 +12,7 @@ on:
         description: "Duration after which artifact will expire in days."
         required: false
         default: "1"
-        needs: build
-        permissions:
-          pages: write
-          id-token: write
+
   pull_request:
     branches: [ "master" ]
 
@@ -47,6 +44,10 @@ jobs:
 
   deploy:
  
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
       
     runs-on: ubuntu-latest
     steps:
