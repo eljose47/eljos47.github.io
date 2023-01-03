@@ -27,8 +27,9 @@ jobs:
         npm install
         npx webpack
 
-    - name: Upload artifacts
-      uses: actions/upload-pages-artifact@main
+    # - name: Upload artifacts
+    #   uses: actions/upload-pages-artifact@main
+    #   with: path: 
 
     - name: Deploy
       uses: actions/deploy-pages@main
