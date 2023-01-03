@@ -39,21 +39,20 @@ jobs:
         npx webpack
 
     - name: Archive artifact
-      shell: sh
-      if: runner.os == 'Linux'
+      shell: /usr/bin/sh -e {0}
       run: |
-        tar --dereference --hard-dereference \
-          --directory "$INPUT_PATH" \
-          -cvf "$RUNNER_TEMP/artifact.tar" \
-          --exclude=.git \
-          --exclude=.github \ 
-          .
+        chmod -c -R +rX "$INPUT_PATH" | while read line; do
+        echo "::warning title=Invalid file permissions automatically fixed::$line"
+        done
+        tar \
+        --dereference --hard-dereference \
+        --directory "$INPUT_PATH" \
+        -cvf "$RUNNER_TEMP/artifact.tar" \
+        --exclude=.git \
+        --exclude=.github \
+        .
       env:
         INPUT_PATH: ./dist
-
-    # - name: Upload artifacts
-    #   uses: actions/upload-pages-artifact@main
-    #   with: path: 
 
   deploy:
  
@@ -64,21 +63,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Archive artifact
-        shell: /usr/bin/sh -e {0}
-        run: |
-          chmod -c -R +rX "$INPUT_PATH" | while read line; do
-          echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
-          tar \
-          --dereference --hard-dereference \
-          --directory "$INPUT_PATH" \
-          -cvf "$RUNNER_TEMP/artifact.tar" \
-          --exclude=.git \
-          --exclude=.github \
-          .
-        env:
-          INPUT_PATH: ./dist
+   
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
