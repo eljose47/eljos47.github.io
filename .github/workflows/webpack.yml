@@ -6,6 +6,16 @@ on:
   pull_request:
     branches: [ "master" ]
 
+    inputs:
+      path:
+        required: true
+        default: "dist/"
+        
+      retention-days:
+        description: "Duration after which artifact will expire in days."
+        required: false
+        default: "1"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,6 +41,11 @@ jobs:
     #   uses: actions/upload-pages-artifact@main
     #   with: path: 
 
+  upload artifacts:
+    needs: build
+    steps: 
+      - name
+
 
   deploy:
     needs: build
@@ -40,6 +55,62 @@ jobs:
       
     runs-on: ubuntu-latest
     steps:
+      - name: Archive artifact
+        shell: sh
+        if: runner.os == 'Linux'
+        run: |
+          chmod -c -R +rX "$INPUT_PATH" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+          tar \
+            --dereference --hard-dereference \
+            --directory "$INPUT_PATH" \
+            -cvf "$RUNNER_TEMP/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
+        env:
+          INPUT_PATH: ${{ inputs.path }}
+
+      # Switch to gtar (GNU tar instead of bsdtar which is the default in the MacOS runners so we can use --hard-dereference)
+      - name: Archive artifact
+        shell: sh
+        if: runner.os == 'macOS'
+        run: |
+          chmod -v -R +rX "$INPUT_PATH" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+          gtar \
+            --dereference --hard-dereference \
+            --directory "$INPUT_PATH" \
+            -cvf "$RUNNER_TEMP/artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            .
+        env:
+          INPUT_PATH: ${{ inputs.path }}
+
+      # Massage the paths for Windows only
+      - name: Archive artifact
+        shell: bash
+        if: runner.os == 'Windows'
+        run: |
+          tar \
+            --dereference --hard-dereference \
+            --directory "$INPUT_PATH" \
+            -cvf "$RUNNER_TEMP\artifact.tar" \
+            --exclude=.git \
+            --exclude=.github \
+            --force-local \
+            "."
+        env:
+          INPUT_PATH: ${{ inputs.path }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@main
+        with: 
+          name: github-pages
+          path:  
       - name: Deploy
         uses: actions/deploy-pages@v1
 
