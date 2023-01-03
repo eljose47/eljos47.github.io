@@ -34,18 +34,18 @@ jobs:
 
   deploy:
     inputs:
-    path:
-      required: true
-      default: "dist/"
+      path:
+        required: true
+        default: "dist/"
 
-    retention-days:
-      description: "Duration after which artifact will expire in days."
-      required: false
-      default: "1"
-      needs: build
-      permissions:
-        pages: write
-        id-token: write
+      retention-days:
+        description: "Duration after which artifact will expire in days."
+        required: false
+        default: "1"
+        needs: build
+        permissions:
+          pages: write
+          id-token: write
       
     runs-on: ubuntu-latest
     steps:
